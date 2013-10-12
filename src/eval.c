@@ -5,7 +5,8 @@
 
 int
 repl_eval (repl_session_t *sess) {
-  sess->eval(sess, buffer_string(sess->data.buffer));
+  char *buf = sess->eval(sess, buffer_string(sess->data.buffer));
+  sess->print(sess, buf);
   return sess->rc;
 }
 

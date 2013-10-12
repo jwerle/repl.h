@@ -1,6 +1,6 @@
 
 SRC = $(wildcard src/*.c)
-CFLAGS = -std=c99 -Wall
+CFLAGS = -std=c99 -Wall -Iinclude
 
 all: clean test
 
@@ -11,4 +11,7 @@ test:
 	$(CC) $(SRC) test.c $(CFLAGS) -o test-repl
 	./test-repl
 
-.PHONY: all clean test
+examples/node.c:
+	$(CC) $(SRC) $@ $(CFLAGS) -o examples/node-repl
+
+.PHONY: all clean test examples/node.c

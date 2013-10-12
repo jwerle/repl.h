@@ -1,26 +1,3 @@
-repl.h
-======
-
-Create a repl with eval/print/error hooks with given stdin, stdout, and stderr streams
-
-## install
-
-```sh
-$ clib install jwerle/repl.h
-```
-
-## usage
-
-The `repl` interface is more or less just an api for defining functions
-that answer the "eval", and "print" parts of a REPL routine. The "read"
-part is just a read from a defined "stdin" stream that passes a buffer
-to the defined "eval" function which returns a `char *` that is passed
-to the defined "print" function. The print function if not defined will
-print to the defined "stdout" stream.
-
-```c
-
-
 #include <repl.h>
 
 static char *
@@ -52,29 +29,37 @@ main (void) {
 
 static char *
 eval (repl_session_t *sess, char *buf) {
+  int rc = 0;
   char cmd[4096];
-  char *out_str;
+  char *out_str = NULL;
   char tmp[2048];
+  char *str;
   buffer_t *out = buffer_new();
   FILE *node;
 
   sprintf(cmd, "/usr/bin/env node -e \"%s\"", buf);
-  node = popen(cmd, "r");
+  node = popen(cmd, "w");
 
   if (NULL == node) {
     repl_session_set_error("Couldn't start node");
     sess->rc = 1;
-    return NULL;
-  }
-  
-  while (NULL != fgets(tmp, sizeof(tmp) - 1, node)) {
-    buffer_append(out, tmp);
+  } else {
+    while (NULL != (str = fgets(tmp, sizeof(tmp), node))) {
+      buffer_append(out, tmp);
+    }
+    
+    rc = fclose(node);
+
+    if (-1 == rc) {
+      fprintf(sess->stderr, "error: %s\n", "Error closing node process.");
+    }
+
+    node = NULL;
+    out_str = strdup(buffer_string(out));
   }
 
-  fclose(node);
-
-  out_str = strdup(buffer_string(out));
   buffer_free(out);
+
   return out_str;
 }
 
@@ -82,8 +67,3 @@ static void
 error (repl_session_t *sess, char *err) {
   fprintf(sess->stdout, "error: %s", err);
 }
-```
-
-## license
-
-MIT

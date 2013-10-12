@@ -27,7 +27,7 @@ handle_sigterm (int param) {
 
 // default callbacks
 
-static void
+static char *
 default_eval_cb (repl_session_t *sess, char *cmd);
 
 static void
@@ -63,17 +63,17 @@ repl_session_new (repl_session_opts *opts) {
   else session->print = default_print_cb;
 
   // streams
-  if (NULL != opts->in)
-    session->in = opts->in;
-  else session->in = stdin;
+  if (NULL != opts->stdin)
+    session->stdin = opts->stdin;
+  else session->stdin = stdin;
 
-  if (NULL != opts->out)
-    session->out = opts->out;
-  else session->out = stdout;
+  if (NULL != opts->stdout)
+    session->stdout = opts->stdout;
+  else session->stdout = stdout;
 
-  if (NULL != opts->err)
-    session->err = opts->err;
-  else session->err = stderr;
+  if (NULL != opts->stderr)
+    session->stderr = opts->stderr;
+  else session->stderr = stderr;
 
 
   return session;
@@ -103,6 +103,10 @@ repl_session_start (repl_session_t *session) {
   return rc;
 }
 
+void
+repl_session_set_error (char *err) {
+  __serror = err;
+}
 
 char *
 repl_session_error () {
@@ -117,21 +121,21 @@ repl_session_destroy (repl_session_t *session) {
 
 
 
-static void
+static char *
 default_eval_cb (repl_session_t *sess, char *cmd) {
-  sess->print(sess, cmd);
+  return cmd;
 }
 
 static void
 default_print_cb (repl_session_t *sess, char *buf) {
-  fprintf(sess->out, "%s", buf);
+  fprintf(sess->stdout, "%s", buf);
   repl_loop(sess);
 }
 
 
 void
 default_error_cb (repl_session_t *sess, char *error) {
-  fprintf(sess->err, "%s", error);
+  fprintf(sess->stderr, "%s", error);
   repl_loop(sess);
 }
 

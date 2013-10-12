@@ -1,9 +1,9 @@
 
-#include "src/repl.h"
+#include <repl.h>
 
 repl_session_opts opts;
 
-static void
+static char *
 eval (repl_session_t *sess, char *buf);
 
 static void
@@ -34,21 +34,22 @@ main (void) {
 }
 
 
-static void
+static char *
 eval (repl_session_t *sess, char *buf) {
   // got nothing
-  if (feof(sess->in)) sess->rc = 0;
-  else sess->print(sess, buf);
+  if (feof(sess->stdin)) sess->rc = 0;
+  else return buf;
+  return NULL;
 }
 
 static void
 print (repl_session_t *sess, char *buf) {
-  fprintf(sess->out, "%s", buf);
+  fprintf(sess->stdout, "%s\n", buf);
   repl_loop(sess);
 }
 
 static void
 error (repl_session_t *sess, char *err) {
-  fprintf(sess->err, "error: '%s'\n", err);
+  fprintf(sess->stderr, "error: '%s'\n", err);
   repl_loop(sess);
 }

@@ -20,7 +20,7 @@ struct repl_session;
 
 typedef void (*repl_loop_cb)(struct repl_session *sess);
 typedef void (*repl_print_cb)(struct repl_session *sess, char *buf);
-typedef void (*repl_eval_cb)(struct repl_session *sess, char *cmd);
+typedef char *(*repl_eval_cb)(struct repl_session *sess, char *cmd);
 typedef void (*repl_error_cb)(struct repl_session *sess, char *error);
 
 
@@ -30,9 +30,9 @@ typedef struct repl_session {
   repl_eval_cb eval;
   repl_error_cb error;
   repl_print_cb print;
-  FILE *in;
-  FILE *out;
-  FILE *err;
+  FILE *stdin;
+  FILE *stdout;
+  FILE *stderr;
   repl_read_data_t data;
 } repl_session_t;
 
@@ -45,9 +45,9 @@ typedef struct {
   repl_eval_cb eval_cb;
   repl_error_cb error_cb;
   repl_print_cb print_cb;
-  FILE *in;
-  FILE *out;
-  FILE *err;
+  FILE *stdin;
+  FILE *stdout;
+  FILE *stderr;
 } repl_session_opts;
 
 repl_session_t *
@@ -61,5 +61,8 @@ repl_session_destroy (repl_session_t *session);
 
 char *
 repl_session_error ();
+
+void
+repl_session_set_error (char *err);
 
 #endif
