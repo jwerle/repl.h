@@ -44,7 +44,7 @@ eval (repl_session_t *sess, char *buf) {
 
 static void
 print (repl_session_t *sess, char *buf) {
-  fprintf(sess->stdout, "%s\n", buf);
+  fprintf(sess->stdout, "%s", buf);
   repl_loop(sess);
 }
 
