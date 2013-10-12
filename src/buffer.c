@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <sys/types.h>
 #include "buffer.h"
 
 // TODO: shared with reference counting
