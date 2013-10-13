@@ -103,9 +103,9 @@ repl_session_start (repl_session_t *session) {
   return rc;
 }
 
-void
+char *
 repl_session_set_error (char *err) {
-  __serror = err;
+  return (__serror = err);
 }
 
 char *

@@ -62,7 +62,7 @@ repl_session_destroy (repl_session_t *session);
 char *
 repl_session_error ();
 
-void
+char *
 repl_session_set_error (char *err);
 
 #endif

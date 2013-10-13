@@ -36,10 +36,8 @@ eval (repl_session_t *sess, char *buf) {
   char *str;
   buffer_t *out = buffer_new();
   FILE *node;
-
-  sprintf(cmd, "/usr/bin/env node -e \"%s\"", buf);
+  sprintf(cmd, "/usr/bin/env php -r \"%s\" exit;", buf);
   node = popen(cmd, "w");
-
   if (NULL == node) {
     repl_session_set_error("Couldn't start node");
     sess->rc = 1;

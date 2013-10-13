@@ -14,4 +14,7 @@ test:
 examples/node.c:
 	$(CC) $(SRC) $@ $(CFLAGS) -o examples/node-repl
 
-.PHONY: all clean test examples/node.c
+examples/math.c:
+	$(CC) $(SRC) $@ $(CFLAGS) -o examples/math-repl
+
+.PHONY: all clean test examples/node.c examples/math.c

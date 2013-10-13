@@ -1,4 +1,5 @@
 
+#include "term.h"
 #include "repl.h"
 
 
@@ -10,6 +11,8 @@ repl_read (repl_session_t *sess) {
 
   // reset rc state
   sess->rc = 0;
+
+  term_reset();
   printf("%s ", sess->prompt);
   fgets(buf, REPL_MAX_BUFFER_LENGTH, sess->stdin);
 
