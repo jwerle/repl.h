@@ -49,8 +49,14 @@ eval (repl_session_t *sess, char *buf) {
   int rval = 0;
 
   sscanf(buf, "%d %s %d", &lval, op, &rval);
-  
-  if (NULL == op) {
+
+  if (NULL == &lval) {
+    sess->rc = 1;
+    return repl_session_set_error("Missing left operand\n");
+  } else if (NULL == &rval) {
+    sess->rc = 1;
+    return repl_session_set_error("Missing right operand\n");
+  } if (NULL == op) {
     sess->rc = 1;
     return repl_session_set_error("Missing operator\n");
   }
