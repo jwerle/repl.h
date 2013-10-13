@@ -7,6 +7,9 @@ static char *
 eval (repl_session_t *sess, char *buf);
 
 static void
+print (repl_session_t *sess, char *buf);
+
+static void
 error (repl_session_t *sess, char *err);
 
 int
@@ -15,6 +18,7 @@ main (void) {
   // opts
   opts.prompt = "math>";
   opts.eval_cb = eval;
+  opts.print_cb = print;
   opts.error_cb = error;
 
   // initiate
@@ -85,6 +89,11 @@ eval (repl_session_t *sess, char *buf) {
   return result;
 }
 
+static void
+print (repl_session_t *sess, char *buf) {
+  fprintf(sess->stdout, "%s\n", buf);
+  repl_loop(sess);
+}
 
 static void
 error (repl_session_t *sess, char *err) {
