@@ -1,6 +1,6 @@
 
 SRC = $(wildcard src/*.c)
-CFLAGS = -std=c99 -Wall -Iinclude
+CFLAGS = -std=c99 -Wall
 
 all: clean test
 
