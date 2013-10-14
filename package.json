@@ -22,6 +22,6 @@
     "src/read.h",
     "src/term.c",
     "src/term.h",
-    "src/repl.h",
+    "src/repl.h"
   ]
 }
